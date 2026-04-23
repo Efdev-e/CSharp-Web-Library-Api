@@ -7,18 +7,17 @@ namespace LibraryApi.Data
 {
     public class LibraryDBContext : DbContext
     {
-       public LibraryDBContext(DbContextOptions<LibraryDBContext> options) : base(options)
-        {
-        }
+      
         public DbSet<Author> Authors => Set<Author>();
         public DbSet<Book> Books => Set<Book>();
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public LibraryDBContext(DbContextOptions<LibraryDBContext> options) : base(options) 
         {
-          
-            optionsBuilder.UseSqlServer("Server=localhost;Database=LibraryDB;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveSetResults=true");
+        
         }
 
+
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Author>()
