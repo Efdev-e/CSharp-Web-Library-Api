@@ -1,3 +1,5 @@
+using LibraryApi.Data;
+using LibraryApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApi.Controllers
@@ -6,6 +8,14 @@ namespace LibraryApi.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly LibraryDBContext _context;
+
+
+        public WeatherForecastController(LibraryDBContext context)
+        {
+            _context = context;
+        }
+
         private static readonly string[] Summaries =
         [
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
