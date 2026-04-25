@@ -1,7 +1,8 @@
 ﻿
+
+using LibraryApi.DTOs;
 using LibraryApi.Models;
 using LibraryApi.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApi.Controllers
@@ -26,6 +27,25 @@ namespace LibraryApi.Controllers
             new User { Id = 5, Username = "can", Password = "9876", Role = "admin" }
         };
 
+        [HttpPost("login")]
+        public ActionResult<LoginResponse> Login([FromBody] LoginRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+                return BadRequest(new {error= "Username and Password required"});
 
+            var user = _users.FirstOrDefault(x => x.Username == request.Username && x.Password == request.Password);
+
+            if (user == null)
+                return Unauthorized(new { error = "Username or Password is Invalid" });
+
+            var(token,expiresAt) = _tokenService.GenerateToken(user);
+            return Ok(new LoginResponse
+            {
+                Token = token,
+                ExpiryDate = expiresAt,
+                Username = request.Username,
+                Role = user.Role
+            });
+        }
     }
 }
