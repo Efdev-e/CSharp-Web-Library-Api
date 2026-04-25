@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => 
 {
-    options.SwaggerDoc("LibraryApi", new OpenApiInfo()
+    options.SwaggerDoc("v1", new OpenApiInfo()
     {
         Title = "Library Api",
         Description = "Açıklama",
@@ -21,6 +21,7 @@ builder.Services.AddSwaggerGen(options =>
         
     });
 });
+
 builder.Services.AddDbContext<LibraryDBContext>(options =>
     options.UseInMemoryDatabase("LibraryDB")
 );
@@ -30,7 +31,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<LibraryDBContext>();
-    context.Database.EnsureCreated(); // This triggers OnModelCreating and seeds the data
+    context.Database.EnsureCreated();
 }
 
 // Configure the HTTP request pipeline.
@@ -39,7 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/LibraryApi/swagger.json", "Library Api");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Library Api");
             options.RoutePrefix = "swagger";
 
         }
