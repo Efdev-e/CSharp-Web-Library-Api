@@ -89,11 +89,11 @@ namespace LibraryApi.Controllers
                 b.Id > 0 &&                           
                 b.Year > 1000 &&                     
                 b.Year <= DateTime.Now.Year &&        
-                !string.IsNullOrWhiteSpace(b.Category)
+                !string.IsNullOrWhiteSpace(b.Category) &&
+                !string.IsNullOrWhiteSpace(b.Title)
             );
 
-
-            if (isValidBook)
+            if (!isValidBook)
                 return BadRequest(new { error = "Invalid Book" });
             if (isValidAuthorId)
                 return BadRequest(new { error = "Invalid ID" });
@@ -112,14 +112,31 @@ namespace LibraryApi.Controllers
                     {
                         Title = b.Title,
                         Year = b.Year,
-                        Category = b.Category, 
+                        Category = b.Category,
+                        AuthorId = authorDto.Id,                    
                     }).ToList()
             };
 
             _context.Authors.Add(newAuthor);
             _context.SaveChanges();
 
-            return Ok(newAuthor);
+            var result = new AuthorDto
+            {
+                Id = newAuthor.Id,
+                FullName = newAuthor.FullName,
+                Country = newAuthor.Country,
+
+                Books = newAuthor.Books.Select(b => new BookDto
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Year = b.Year,
+                    Category = b.Category
+                    
+                }).ToList()
+            };
+
+            return Ok(result);
         }
 
 
