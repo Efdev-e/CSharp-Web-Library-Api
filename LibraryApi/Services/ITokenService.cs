@@ -6,5 +6,7 @@ namespace LibraryApi.Services
     {
 
         (string Token, DateTime ExpiresAt) GenerateToken(User user);
+
+        string GenerateRefreshToken();
     }
 }
