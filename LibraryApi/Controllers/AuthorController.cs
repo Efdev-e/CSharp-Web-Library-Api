@@ -1,12 +1,14 @@
 ﻿using LibraryApi.Data;
-using LibraryApi.Models;
 using LibraryApi.DTOs; 
+using LibraryApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class AuthorController : ControllerBase
     {
